@@ -1,7 +1,23 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: implementation_imports, depend_on_referenced_packages
 
-void main() {
-  runApp(const MyApp());
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:space_x/localization/app_localization.dart';
+import 'package:space_x/routes/app_module.dart';
+import 'package:space_x/routes/home.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:loader_overlay/src/global_loader_overlay.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Modular.setInitialRoute(HomePageType.home.path);
+  final apiClient = createApiClient('https://api.spacexdata.com/v4/');
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  runApp(ModularApp(module: AppModule(apiClient), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -9,59 +25,47 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+    return GlobalLoaderOverlay(
+      overlayColor: Colors.black.withOpacity(0.5),
+      overlayWidgetBuilder:
+          (_) => Center(
+            child: LoadingAnimationWidget.dotsTriangle(
+              color: Colors.black,
+              size: 30,
             ),
+          ),
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(),
+        child: MaterialApp.router(
+          title: 'SpaceX Flutter App',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+
+          debugShowCheckedModeBanner: false,
+          routerConfig: Modular.routerConfig,
+          locale: Locale('th'),
+          localizationsDelegates: const [
+            // Add your localization delegates here
+            AppLocalizations.delegate,
+
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
+          supportedLocales: AppLocalizations.supportedLocales,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
+}
+
+Dio createApiClient(String baseURL) {
+  final dio =
+      Dio()
+        ..options.baseUrl = baseURL
+        ..options.connectTimeout = const Duration(milliseconds: 6000)
+        ..options.receiveTimeout = const Duration(milliseconds: 6000);
+  return dio;
 }
