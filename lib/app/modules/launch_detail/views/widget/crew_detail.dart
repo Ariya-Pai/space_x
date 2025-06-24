@@ -3,6 +3,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/core/utils/themes/color.dart';
 import 'package:space_x/core/utils/themes/text.dart';
+import 'package:space_x/localization/app_localization.dart';
 
 class CrewDetail extends StatefulWidget {
   final List<CrewModel>? data;
@@ -16,10 +17,16 @@ class _CrewDetailState extends State<CrewDetail> {
   @override
   Widget build(BuildContext context) {
     List<CrewModel>? crew = widget.data;
+    final localizations = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextApp(text: "Crew", fontWeight: FontWeight.w600, fonzSize: 20),
+        TextApp(
+          text: localizations.crew.tile,
+          fontWeight: FontWeight.w600,
+          fonzSize: 20,
+        ),
         // ignore: prefer_is_empty
         (crew?.length != 0)
             ? SizedBox(

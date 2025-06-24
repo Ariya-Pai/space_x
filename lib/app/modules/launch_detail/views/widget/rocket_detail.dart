@@ -4,6 +4,7 @@ import 'package:space_x/app/data/model/rocket_Model.dart';
 import 'package:space_x/core/utils/themes/color.dart';
 import 'package:space_x/core/utils/themes/text.dart';
 import 'package:space_x/core/utils/widgets/function_shared.dart';
+import 'package:space_x/localization/app_localization.dart';
 
 class RocketDetail extends StatefulWidget {
   final RocketModel? data;
@@ -17,12 +18,18 @@ class _RocketDetailState extends State<RocketDetail> {
   @override
   Widget build(BuildContext context) {
     RocketModel? rocket = widget.data;
+    final localizations = AppLocalizations.of(context);
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextApp(text: "Rocket", fontWeight: FontWeight.w600, fonzSize: 20),
+          TextApp(
+            text: localizations.rocke.title,
+            fontWeight: FontWeight.w600,
+            fonzSize: 20,
+          ),
           Row(
             children: [
               Expanded(
@@ -53,19 +60,19 @@ class _RocketDetailState extends State<RocketDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     FunctionShared.textSpand(
-                      title: "Name",
+                      title: localizations.home.name,
                       description: rocket?.name ?? "-",
                     ),
                     FunctionShared.textSpand(
-                      title: "Type",
+                      title: localizations.rocke.type,
                       description: rocket?.type ?? "-",
                     ),
                     FunctionShared.textSpand(
-                      title: "Contry",
+                      title: localizations.rocke.contry,
                       description: rocket?.country ?? "-",
                     ),
                     FunctionShared.textSpand(
-                      title: "Company",
+                      title: localizations.rocke.company,
                       description: rocket?.company ?? "-",
                     ),
                   ],

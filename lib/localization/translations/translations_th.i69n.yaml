@@ -1,3 +1,31 @@
 home:
-  title: 'ปล่อยจรวด'
-  welcome: 'ยินดีต้อนรับสู่แอป SpaceX Flutter'
+  title: 'ภารกิจปล่อยจรวด'
+  search: 'ค้นหาตามชื่อ...'
+  sortBy: 'เรียงตาม'
+  date: 'วันที่'
+  name: 'ชื่อ'
+
+deatil:
+  deatils: 'รายละเอียด'
+  statusTask: 'ปล่อยสำเร็จ'
+  dateLaunches: 'กำหนดปล่อย'
+  launchesDate: 'วันที่ปล่อย'
+  yes : "สำเร็จ"
+  no: "ล้มเหลว"
+  upcomming: "กำลังจะปล่อย"
+  launched: "ปล่อยแล้ว"
+rocke:
+  title: 'จรวด'
+  type: 'ประเภท'
+  contry: 'ประเทศ'
+  company: 'บริษัท'
+
+launchpad:
+  title: 'ฐานปล่อย'
+  fullName: 'ชื่อเต็ม'
+  locality: 'ท้องถิ่น'
+  region: 'ภูมิภาค'
+  timeZone: 'เขตเวลา'
+  status: 'สถานะ'
+crew :
+  tile : "นักบิน"

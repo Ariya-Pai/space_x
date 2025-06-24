@@ -3,9 +3,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:space_x/localization/app_localization.dart';
+import 'package:space_x/localization/language/bloc/set_languange_bloc.dart';
 import 'package:space_x/routes/app_module.dart';
 import 'package:space_x/routes/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,7 +19,16 @@ Future<void> main() async {
   final apiClient = createApiClient('https://api.spacexdata.com/v4/');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  runApp(ModularApp(module: AppModule(apiClient), child: const MyApp()));
+  runApp(
+    ModularApp(
+      module: AppModule(apiClient),
+
+      child: BlocProvider(
+        create: (_) => SetLanguangeBloc(),
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -37,25 +48,27 @@ class MyApp extends StatelessWidget {
           ),
       child: MediaQuery(
         data: MediaQuery.of(context).copyWith(),
-        child: MaterialApp.router(
-          title: 'SpaceX Flutter App',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-
-          debugShowCheckedModeBanner: false,
-          routerConfig: Modular.routerConfig,
-          locale: Locale('en'),
-          localizationsDelegates: const [
-            // Add your localization delegates here
-            AppLocalizations.delegate,
-
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
+        child: BlocBuilder<SetLanguangeBloc, SetLanguangeState>(
+          bloc: Modular.get<SetLanguangeBloc>(),
+          builder: (context, localeState) {
+            return MaterialApp.router(
+              title: 'SpaceX Flutter App',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              debugShowCheckedModeBanner: false,
+              routerConfig: Modular.routerConfig,
+              locale: Locale('${localeState.language}'),
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+            );
+          },
         ),
       ),
     );

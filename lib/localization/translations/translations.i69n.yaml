@@ -1,3 +1,30 @@
 home:
   title: 'Launches'
-  welcome: 'Welcome to the SpaceX Flutter App'
+  search: 'Search by name...'
+  sortBy: "Sort by"
+  date : "Date"
+  name: "Name"
+deatil:
+  deatils: "Detail"
+  statusTask: "Success"
+  dateLaunches: "Upcoming"
+  launchesDate : "Launches date"
+  yes : "Success"
+  no: "Failures"
+  upcomming : "Upcomming"
+  launched : "Launched"
+rocke:
+  title: "Rocket"
+  type: "Type"
+  contry: "Contry"
+  company: "Company"
+launchpad:
+  title: "launchpad"
+  fullName : "full name"
+  locality : "Locality"
+  region : "Region"
+  timeZone : "Time zone"
+  status : "Status"
+crew :
+  tile : "Crew"
+  

@@ -29,6 +29,7 @@ class HomeState extends Equatable {
     LaunchPadModel? oneLaunchpad,
     LaunchesModel? oneLaunches,
     List<CrewModel>? crewModel,
+    String? language,
   }) {
     return HomeState(
       status: status ?? this.status,

@@ -10,6 +10,7 @@ import 'package:space_x/core/utils/widgets/appbar_widget.dart';
 import 'package:space_x/core/utils/widgets/function_shared.dart';
 import 'package:space_x/core/utils/widgets/search_widget.dart';
 import 'package:space_x/localization/app_localization.dart';
+import 'package:space_x/localization/translations/translations.i69n.dart';
 import 'package:space_x/routes/home.dart';
 
 class HomePage extends StatefulWidget {
@@ -89,8 +90,8 @@ class _HomePageState extends State<HomePage> {
                     _searchByName();
                   },
                 ),
-                _sortLaunch(filteredLaunches),
-                _launchList(screenSize, filteredLaunches),
+                _sortLaunch(filteredLaunches, localizations),
+                _launchList(screenSize, filteredLaunches, localizations),
               ],
             ),
           );
@@ -99,20 +100,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _sortLaunch(List<LaunchesModel>? launchData) {
+  Widget _sortLaunch(
+    List<LaunchesModel>? launchData,
+    Translations localizations,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          TextApp(text: "Sort by : "),
+          TextApp(text: "${localizations.home.sortBy} : "),
           SizedBox(
             width: 80,
             child: DropdownButton<String>(
               value: _selectedSort,
               items: [
-                DropdownMenuItem(value: 'date', child: Text('Date')),
-                DropdownMenuItem(value: 'name', child: Text('Name')),
+                DropdownMenuItem(
+                  value: 'date',
+                  child: TextApp(text: localizations.home.date),
+                ),
+                DropdownMenuItem(
+                  value: 'name',
+                  child: TextApp(text: localizations.home.name),
+                ),
               ],
               onChanged: (value) {
                 Modular.get<HomeBloc>().add(
@@ -132,19 +142,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _launchList(Size sceenSize, List<LaunchesModel>? launchData) {
+  Widget _launchList(
+    Size sceenSize,
+    List<LaunchesModel>? launchData,
+    Translations localizations,
+  ) {
     return SizedBox(
       height: sceenSize.height * 0.75,
       child: ListView.builder(
         itemCount: launchData?.length ?? 0,
         itemBuilder: (context, index) {
-          return _launchCard(launchData?[index]);
+          return _launchCard(launchData?[index], localizations);
         },
       ),
     );
   }
 
-  Widget _launchCard(LaunchesModel? launchData) {
+  Widget _launchCard(LaunchesModel? launchData, Translations localizations) {
     return GestureDetector(
       onTap: () {
         Modular.to.pushNamed(
@@ -192,13 +206,16 @@ class _HomePageState extends State<HomePage> {
                     textAlign: TextAlign.start,
                   ),
                   TextApp(
-                    text: (launchData?.success == true) ? "Sucess" : "Failures",
+                    text:
+                        (launchData?.success == true)
+                            ? localizations.deatil.yes
+                            : localizations.deatil.no,
                   ),
                   TextApp(
                     text:
                         (launchData?.upcoming == true)
-                            ? "Upcomming"
-                            : "Launched",
+                            ? localizations.deatil.upcomming
+                            : localizations.deatil.launched,
                   ),
                 ],
               ),
