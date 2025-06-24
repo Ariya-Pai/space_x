@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           (_) => Center(
             child: LoadingAnimationWidget.dotsTriangle(
               color: Colors.black,
-              size: 30,
+              size: 50,
             ),
           ),
       child: MediaQuery(
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
 
           debugShowCheckedModeBanner: false,
           routerConfig: Modular.routerConfig,
-          locale: Locale('th'),
+          locale: Locale('en'),
           localizationsDelegates: const [
             // Add your localization delegates here
             AppLocalizations.delegate,

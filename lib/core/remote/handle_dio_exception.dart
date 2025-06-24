@@ -1,21 +1,16 @@
 import 'package:dio/dio.dart';
 
+import '../../app/data/model/error_msg.dart';
+
 extension DioExceptionExtension on DioException {
-  String get message {
+  ErrorMsg toAppError() {
     switch (type) {
       case DioExceptionType.connectionTimeout:
-        return 'Connection timed out';
-      case DioExceptionType.sendTimeout:
-        return 'Send timed out';
+        return ErrorMsg('connectionTimeout');
       case DioExceptionType.receiveTimeout:
-        return 'Receive timed out';
-      case DioExceptionType.badResponse:
-        return 'Bad response: ${response?.statusCode}';
-      case DioExceptionType.cancel:
-        return 'Request cancelled';
-      case DioExceptionType.unknown:
+        return ErrorMsg('receiveTimeout');
       default:
-        return 'Unknown error occurred';
+        return ErrorMsg(response?.statusCode.toString() ?? message.toString());
     }
   }
 }

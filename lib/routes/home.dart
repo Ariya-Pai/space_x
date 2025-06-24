@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:space_x/app/data/model/launches_model.dart';
+import 'package:space_x/app/domain/use_case/launch_use_case.dart';
 import 'package:space_x/app/modules/home/bloc/home_bloc.dart';
 import 'package:space_x/app/modules/home/views/home_page.dart';
+import 'package:space_x/app/modules/launch_detail/views/launch_detail_page.dart';
 
-enum HomePageType { home, details }
+enum HomePageType { home, launchDetails }
 
 extension HomeExtension on HomePageType {
   String toShortString() {
@@ -31,8 +36,32 @@ class HomeModule extends Module {
     r.child(
       HomePageType.home.route,
       child:
-          (context) =>
-              BlocProvider(create: (context) => HomeBloc(), child: HomePage()),
+          (context) => BlocProvider<HomeBloc>(
+            lazy: false,
+
+            create:
+                (context) =>
+                    HomeBloc(Modular.get<LaunchUseCase>())
+                      ..add(GetAllLaunches()),
+            child: HomePage(),
+          ),
+    );
+    r.child(
+      HomePageType.launchDetails.route,
+      child: (context) {
+        LaunchesModel args = Modular.args.data;
+
+        return BlocProvider<HomeBloc>(
+          lazy: false,
+          create:
+              (context) =>
+                  HomeBloc(Modular.get<LaunchUseCase>())
+                    ..add(GetRocketDetail(id: args.rocket ?? ""))
+                    ..add(SaveOneLaunches(data: args))
+                    ..add(GetOneLaunchPad(id: args.launchpad ?? "")),
+          child: LaunchDetailPage(),
+        );
+      },
     );
   }
 }
