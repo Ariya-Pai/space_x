@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:space_x/app/data/model/launches_model.dart';
@@ -58,7 +56,9 @@ class HomeModule extends Module {
                   HomeBloc(Modular.get<LaunchUseCase>())
                     ..add(GetRocketDetail(id: args.rocket ?? ""))
                     ..add(SaveOneLaunches(data: args))
+                    ..add(GetOneCrew(id: args.crew ?? []))
                     ..add(GetOneLaunchPad(id: args.launchpad ?? "")),
+
           child: LaunchDetailPage(),
         );
       },

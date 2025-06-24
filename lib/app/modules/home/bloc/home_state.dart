@@ -8,6 +8,7 @@ class HomeState extends Equatable {
   final RocketModel? rocketModel;
   final LaunchPadModel? oneLaunchpad;
   final LaunchesModel? oneLaunches;
+  final List<CrewModel>? crewModel;
 
   const HomeState({
     this.status = HomeStatus.initial,
@@ -17,6 +18,7 @@ class HomeState extends Equatable {
     this.rocketModel,
     this.oneLaunchpad,
     this.oneLaunches,
+    this.crewModel,
   });
   HomeState copyWith({
     HomeStatus? status,
@@ -26,6 +28,7 @@ class HomeState extends Equatable {
     RocketModel? rocketModel,
     LaunchPadModel? oneLaunchpad,
     LaunchesModel? oneLaunches,
+    List<CrewModel>? crewModel,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -35,6 +38,7 @@ class HomeState extends Equatable {
       rocketModel: rocketModel ?? this.rocketModel,
       oneLaunchpad: oneLaunchpad ?? this.oneLaunchpad,
       oneLaunches: oneLaunches ?? this.oneLaunches,
+      crewModel: crewModel ?? this.crewModel,
     );
   }
 
@@ -47,6 +51,7 @@ class HomeState extends Equatable {
     rocketModel,
     oneLaunchpad,
     oneLaunches,
+    crewModel,
   ];
 }
 

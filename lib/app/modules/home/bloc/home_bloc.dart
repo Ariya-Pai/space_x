@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/app/data/model/lauchpad.dart';
 import 'package:space_x/app/data/model/launches_model.dart';
 import 'package:space_x/app/data/model/rocket_Model.dart';
@@ -23,22 +24,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   Future<void> onGetOneCrew(GetOneCrew event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: HomeStatus.loading));
-    // final response = await launchUseCase.getAllLaunchPads();
-    // response.fold(
-    //   (left) {
-    //     emit(state.copyWith(status: HomeStatus.error, errorMsg: left.message));
-    //   },
-    //   (right) {
-    //     emit(state.copyWith(status: HomeStatus.success, launchPadModel: right));
-    //   },
-    // );
+    final response = await launchUseCase.getCrew(id: event.id);
+    response.fold(
+      (left) {
+        emit(state.copyWith(status: HomeStatus.error, errorMsg: left.message));
+      },
+      (right) {
+        emit(state.copyWith(status: HomeStatus.success, crewModel: right));
+      },
+    );
   }
 
   Future<void> onSaveOneLaunches(
     SaveOneLaunches event,
     Emitter<HomeState> emit,
   ) async {
-    log("evet ${event.data.toJson()}");
     emit(state.copyWith(oneLaunches: event.data));
   }
 

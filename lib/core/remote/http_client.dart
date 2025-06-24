@@ -63,6 +63,7 @@ class HttpClient implements HttpRequest {
     return result;
   }
 
+  @override
   Future<Response> get(String path, {dynamic headers, dynamic query}) async {
     return await _createOperation(
       path,
@@ -72,6 +73,7 @@ class HttpClient implements HttpRequest {
     );
   }
 
+  @override
   Future<Response> post(String path, {dynamic headers, dynamic body}) async {
     return await _createOperation(
       path,

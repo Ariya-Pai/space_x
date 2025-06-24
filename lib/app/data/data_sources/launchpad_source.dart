@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
+import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/app/data/model/lauchpad.dart';
 import 'package:space_x/app/data/model/launches_model.dart';
 import 'package:space_x/app/data/model/rocket_Model.dart';
@@ -24,6 +23,21 @@ class LaunchpadSource {
     Response response = await httpRequest.get('/rockets/$id');
 
     return RocketModel.fromJson(response.data);
+  }
+
+  Future<List<CrewModel>> getCrew({List<String>? id}) async {
+    int? countID = id?.length ?? 0;
+    List<CrewModel> crewList = [];
+    if (countID > 0) {
+      for (var element in id!) {
+        Response response = await httpRequest.get('/crew/$element');
+
+        CrewModel crewdata = CrewModel.fromJson(response.data);
+        crewList.add(crewdata);
+      }
+    }
+
+    return crewList;
   }
 
   Future<LaunchPadModel> getOneLaunchPad({String? id}) async {

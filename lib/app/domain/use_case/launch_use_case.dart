@@ -1,10 +1,10 @@
 import 'package:either_dart/either.dart';
+import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/app/data/model/error_msg.dart';
 import 'package:space_x/app/data/model/lauchpad.dart';
 import 'package:space_x/app/data/model/launches_model.dart';
 import 'package:space_x/app/data/model/rocket_Model.dart';
 import 'package:space_x/app/domain/repository/launch_repo.dart';
-import 'package:space_x/app/modules/home/bloc/home_bloc.dart';
 
 class LaunchUseCase {
   final LaunchRepo launchRepo;
@@ -35,6 +35,13 @@ class LaunchUseCase {
   }) async {
     final rocketData = await launchRepo.getRocketDetail(id: id);
     return rocketData;
+  }
+
+  Future<Either<ErrorMsg, List<CrewModel>>> getCrew({
+    required List<String> id,
+  }) async {
+    final crewData = await launchRepo.getCrew(id: id);
+    return crewData;
   }
 
   Future<Either<ErrorMsg, LaunchPadModel>> getOneLaunchPad({

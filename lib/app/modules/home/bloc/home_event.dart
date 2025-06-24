@@ -24,7 +24,7 @@ class GetRocketDetail extends HomeEvent {
 }
 
 class GetOneCrew extends HomeEvent {
-  final String id;
+  final List<String> id;
   const GetOneCrew({required this.id});
 }
 

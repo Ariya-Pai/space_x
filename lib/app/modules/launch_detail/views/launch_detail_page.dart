@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:space_x/app/modules/home/bloc/home_bloc.dart';
+import 'package:space_x/app/modules/launch_detail/views/widget/crew_detail.dart';
+import 'package:space_x/app/modules/launch_detail/views/widget/launches_detail.dart';
+import 'package:space_x/app/modules/launch_detail/views/widget/launchpad_detail.dart';
+import 'package:space_x/app/modules/launch_detail/views/widget/rocket_detail.dart';
+import 'package:space_x/core/utils/themes/color.dart';
 
 class LaunchDetailPage extends StatelessWidget {
   const LaunchDetailPage({super.key});
@@ -13,13 +19,15 @@ class LaunchDetailPage extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state.status == HomeStatus.loading) {
-          context.loaderOverlay.show();
+          // context.loaderOverlay.show();
         } else {
           context.loaderOverlay.hide();
         }
 
         final launch = state.oneLaunches;
         final launchpad = state.oneLaunchpad;
+        final rocket = state.rocketModel;
+        final crew = state.crewModel;
 
         final imageUrl =
             (launchpad?.images?.isNotEmpty ?? false)
@@ -41,9 +49,11 @@ class LaunchDetailPage extends StatelessWidget {
                         fit: BoxFit.cover,
                         width: double.infinity,
                         errorBuilder:
-                            (context, error, stackTrace) => Container(
-                              color: Colors.grey,
-                              child: Center(child: Text("Image Loading")),
+                            (context, error, stackTrace) => Center(
+                              child: LoadingAnimationWidget.twoRotatingArc(
+                                color: AppColorsWidget.textGrey,
+                                size: 50,
+                              ),
                             ),
                       ),
                     ),
@@ -52,41 +62,31 @@ class LaunchDetailPage extends StatelessWidget {
               ),
               Positioned(
                 top: screenSize.height * 0.45,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  width: screenSize.width,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
+                child: SizedBox(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        launch?.name ?? "No Name",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    width: screenSize.width,
+                    height: screenSize.height * 0.55,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LaunchesDetail(data: launch),
+                          Divider(),
+                          RocketDetail(data: rocket),
+                          Divider(),
+                          CrewDetail(data: crew),
+                          Divider(),
+                          LaunchpadDetail(data: launchpad),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "Success: ${launch?.success == true ? "Yes" : "No"}",
-                      ),
-                      Text(
-                        "Upcoming: ${launch?.upcoming == true ? "Yes" : "No"}",
-                      ),
-                      Text(
-                        "Date: ${launch?.dateUtc != null ? launch!.dateUtc!.toLocal().toString() : "N/A"}",
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Launchpad: ${launchpad?.fullName ?? "N/A"}",
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

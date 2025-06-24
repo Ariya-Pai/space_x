@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlobalLoaderOverlay(
+      // ignore: deprecated_member_use
       overlayColor: Colors.black.withOpacity(0.5),
       overlayWidgetBuilder:
           (_) => Center(

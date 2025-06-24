@@ -1,3 +1,4 @@
+import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/app/data/model/error_msg.dart';
 import 'package:either_dart/either.dart';
 import 'package:space_x/app/data/model/lauchpad.dart';
@@ -13,4 +14,5 @@ abstract class LaunchRepo {
   });
   Future<Either<ErrorMsg, RocketModel>> getRocketDetail({String id});
   Future<Either<ErrorMsg, LaunchPadModel>> getOneLaunchPad({String id});
+  Future<Either<ErrorMsg, List<CrewModel>>> getCrew({List<String> id});
 }

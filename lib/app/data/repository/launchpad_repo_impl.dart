@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:space_x/app/data/data_sources/launchpad_source.dart';
+import 'package:space_x/app/data/model/crew_model.dart';
 import 'package:space_x/app/data/model/error_msg.dart';
 import 'package:space_x/app/data/model/lauchpad.dart';
 import 'package:space_x/app/data/model/launches_model.dart';
@@ -22,6 +24,7 @@ class LaunchpadRepoImpl implements LaunchRepo {
     }
   }
 
+  @override
   Future<Either<ErrorMsg, List<LaunchesModel>>> getAllLaunches() async {
     try {
       final launchData = await launchpadSource.getAllLaunches();
@@ -31,6 +34,7 @@ class LaunchpadRepoImpl implements LaunchRepo {
     }
   }
 
+  @override
   Future<List<LaunchesModel>> sortLaunches(
     List<LaunchesModel>? launch, {
     bool? sortByDate,
@@ -42,6 +46,9 @@ class LaunchpadRepoImpl implements LaunchRepo {
       );
       return launchData;
     } on DioException catch (e) {
+      if (kDebugMode) {
+        print("error $e");
+      }
       return [];
     }
   }
@@ -53,6 +60,16 @@ class LaunchpadRepoImpl implements LaunchRepo {
     try {
       final launchData = await launchpadSource.getRocketDetail(id: id);
       return Right(launchData);
+    } on DioException catch (e) {
+      return Left(e.toAppError());
+    }
+  }
+
+  @override
+  Future<Either<ErrorMsg, List<CrewModel>>> getCrew({List<String>? id}) async {
+    try {
+      final crewData = await launchpadSource.getCrew(id: id);
+      return Right(crewData);
     } on DioException catch (e) {
       return Left(e.toAppError());
     }
